@@ -15,7 +15,7 @@
                     <a href="404.php" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Help Center</a>
                 </div>
 
-                <div>Made with <span class="text-rose-500">❤️</span> for Hostel Residents</div>
+                <div>Made with <span class="text-rose-500">❤️</span> for IITB Hostel Residents</div>
             </div>
         </footer>
     </div>

@@ -31,3 +31,20 @@ CREATE TABLE `hmanwm`.`log` (`id` INT NOT NULL AUTO_INCREMENT , `roll` VARCHAR(7
 ALTER TABLE `log` DROP `dur`;
 ALTER TABLE `user` ADD `pass` VARCHAR(255) NOT NULL AFTER `credits`;
 ALTER TABLE `log` ADD `name` VARCHAR(255) NOT NULL AFTER `booktime`;
+ALTER TABLE `log` CHANGE `time` `time` DATETIME NOT NULL;
+ALTER TABLE `log` DROP `date`;
+ALTER TABLE `wm` CHANGE `id` `id` INT(6) NOT NULL COMMENT 'XXYZZT | X-Hostel Y-Wing Z-Floor T - Type (1 - Washer, 2 - Dryer)';
+ALTER TABLE `wm` DROP `hn`;
+ALTER TABLE `wm` DROP `floor`;
+ALTER TABLE `wm` DROP `type`;
+ALTER TABLE `log` CHANGE `wm_id` `wm_id` INT(6) NOT NULL;
+ALTER TABLE `wm` CHANGE `id` `wm_id` INT(6) NOT NULL COMMENT 'XXYZZT | X-Hostel Y-Wing Z-Floor T - Type (1 - Washer, 2 - Dryer)';
+
+
+
+
+
+
+
+
+INSERT INTO `wm` (`wm_id`, `working`) VALUES ('161021', '1'), ('161041', '0'), ('161061', '1'), ('161081', '1'), ('161101', '1'), ('161022', '1');

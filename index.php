@@ -22,6 +22,17 @@
 
                 // 2. Verify password
                 if (password_verify($password, $user["pass"])) {
+                    $hn = $user["hn"];
+                    $roll = $user["roll"];
+
+                    $sqlw = "SELECT COUNT(*) AS count FROM `wm` WHERE `wm_id` LIKE '{$hn}__1'";
+                    $resultw = $conn->query($sqlw);
+                    $roww = $resultw->fetch_assoc();
+
+                    $sqld = "SELECT COUNT(*) AS count FROM `wm` WHERE `wm_id` LIKE '{$hn}__2'";
+                    $resultd = $conn->query($sqld);
+                    $rowd = $resultd->fetch_assoc();
+
                     // 3. Create session
                     $_SESSION["roll"] = $user["roll"];
                     $_SESSION["name"] = $user["name"];
@@ -29,6 +40,8 @@
                     $_SESSION["hn"] = $user["hn"];
                     $_SESSION["rn"] = $user["rn"];
                     $_SESSION["credits"] = $user["credits"];
+                    $_SESSION["w_no"] = $roww['count'];
+                    $_SESSION["d_no"] = $rowd['count'];
 
                     $msg = "Successfuly Logged In";
                     $warn = "success";
