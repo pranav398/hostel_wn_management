@@ -36,7 +36,7 @@
                 <div>
                     <?php
                         $hn = $_SESSION['hn'];
-                        $sqlw = "SELECT COUNT(*) AS count FROM (SELECT `wm_id` FROM `log` WHERE `wm_id` LIKE '{$hn}__1' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW() UNION SELECT `wm_id` FROM `wm` WHERE `wm_id` LIKE '{$hn}__1' AND `working` = '0') AS combined;";
+                        $sqlw = "SELECT COUNT(*) AS count FROM (SELECT `wm_id` FROM `log` WHERE `wm_id` LIKE '{$hn}__1' AND `status` = '1' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW() UNION SELECT `wm_id` FROM `wm` WHERE `wm_id` LIKE '{$hn}__1' AND `working` = '0') AS combined;";
                         $resultw = $conn->query($sqlw);
                         $roww = $resultw->fetch_assoc();
                         $ww = $_SESSION['w_no'] - $roww['count'];
@@ -52,7 +52,7 @@
                 </div>
                 <div>
                     <?php
-                        $sqld = "SELECT COUNT(*) AS count FROM (SELECT `wm_id` FROM `log` WHERE `wm_id` LIKE '{$hn}__2' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW() UNION SELECT `wm_id` FROM `wm` WHERE `wm_id` LIKE '{$hn}__2' AND `working` = '0') AS combined;";
+                        $sqld = "SELECT COUNT(*) AS count FROM (SELECT `wm_id` FROM `log` WHERE `wm_id` LIKE '{$hn}__2' AND `status` = '1' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW() UNION SELECT `wm_id` FROM `wm` WHERE `wm_id` LIKE '{$hn}__2' AND `working` = '0') AS combined;";
                         $resultd = $conn->query($sqld);
                         $rowd = $resultd->fetch_assoc();
                         $wd = $_SESSION['d_no'] - $rowd['count'];
@@ -79,7 +79,7 @@
                 <div>
                     <?php
                         $roll = $_SESSION['roll'];
-                        $sqlh = "SELECT * FROM `log` WHERE `roll` = '$roll' ORDER BY `time` DESC";
+                        $sqlh = "SELECT * FROM `log` WHERE `roll` = '$roll' AND `status` = '1' ORDER BY `time` DESC";
                         $resulth = $conn->query($sqlh);
                         $h_no = $resulth->num_rows;
                     ?>
@@ -91,7 +91,7 @@
 
         <section class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm relative overflow-hidden">
             <?php
-                $sqlp = "SELECT * FROM `log` WHERE `roll` = '$roll' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW()";
+                $sqlp = "SELECT * FROM `log` WHERE `roll` = '$roll' AND `status` = '1' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW()";
                 $resultp = $conn->query($sqlp);
 
                 if($resultp->num_rows == 0){
@@ -203,14 +203,14 @@
                             $maoclass2 = 'w-10 h-10 rounded-xl bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-300 flex items-center justify-center font-bold text-xs';
                             $maoclass3 = 'px-2 py-1 rounded-lg text-[10px] font-bold bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300';
                         }
-                        elseif($rowp['wm_id'] == $maoid){ // Senario 1
+                        elseif(isset($rowp) && $rowp['wm_id'] == $maoid){ // Senario 1
                             $maostatus = 'Your Wash';
                             $maoclass1 = 'p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-800/60 border border-blue-200 dark:border-blue-700/80 flex items-center justify-between';
                             $maoclass2 = 'w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-300 flex items-center justify-center font-bold text-xs';
                             $maoclass3 = 'px-2 py-1 rounded-lg text-[10px] font-bold bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300';
                         }
                         else{
-                            $sqlmao2 = "SELECT * FROM `log` WHERE `wm_id` = '$maoid' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW()";
+                            $sqlmao2 = "SELECT * FROM `log` WHERE `wm_id` = '$maoid' AND `status` = '1' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 90 MINUTE) AND NOW()";
                             $resultmao2 = $conn->query($sqlmao2);
                             if($resultmao2->num_rows == 0){
                                 $maostatus = 'Idle';

@@ -38,7 +38,7 @@ ALTER TABLE `wm` DROP `hn`;
 ALTER TABLE `wm` DROP `floor`;
 ALTER TABLE `wm` DROP `type`;
 ALTER TABLE `log` CHANGE `wm_id` `wm_id` INT(6) NOT NULL;
-ALTER TABLE `wm` CHANGE `id` `wm_id` INT(6) NOT NULL COMMENT 'XXYZZT | X-Hostel Y-Wing Z-Floor T - Type (1 - Washer, 2 - Dryer)';
+ALTER TABLE `log` ADD `status` TINYINT(1) NOT NULL DEFAULT '1' AFTER `name`;
 
 
 
