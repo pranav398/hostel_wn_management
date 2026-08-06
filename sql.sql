@@ -39,6 +39,7 @@ ALTER TABLE `wm` DROP `floor`;
 ALTER TABLE `wm` DROP `type`;
 ALTER TABLE `log` CHANGE `wm_id` `wm_id` INT(6) NOT NULL;
 ALTER TABLE `log` ADD `status` TINYINT(1) NOT NULL DEFAULT '1' AFTER `name`;
+ALTER TABLE `log` CHANGE `name` `iden` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Name (ZZZZ) : ZZZZ : Room Number';
 
 
 

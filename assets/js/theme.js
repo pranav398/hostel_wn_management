@@ -5,18 +5,19 @@
 (function () {
   'use strict';
 
-  // Apply saved theme immediately before DOM paint to prevent flash
-  const savedTheme = localStorage.getItem('aurawash_theme');
-  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function applySavedTheme() {
+    const savedTheme = localStorage.getItem('aurawash_theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }
 
   function updateIcons() {
-    const themeButtons = document.queryselectSorAll('.theme-toggle-btn');
+    const themeButtons = document.querySelectorAll('.theme-toggle-btn');
     const isDark = document.documentElement.classList.contains('dark');
 
     themeButtons.forEach((btn) => {
@@ -35,7 +36,7 @@
     });
   }
 
-  window.toggleTheme = function () {
+  function toggleTheme() {
     const isDarkNow = document.documentElement.classList.contains('dark');
 
     if (isDarkNow) {
@@ -51,11 +52,9 @@
     if (window.showToast) {
       window.showToast(`Switched to ${!isDarkNow ? 'Dark' : 'Light'} Mode`, 'info');
     }
-  };
+  }
 
-  // Bind toggle listener once DOM is ready, using delegation so it still works
-  // after the shared header/sidebar content is dynamically injected into the page.
-  document.addEventListener('DOMContentLoaded', () => {
+  function initThemeControls() {
     updateIcons();
 
     document.addEventListener('click', (event) => {
@@ -63,7 +62,16 @@
       if (!themeButton) return;
 
       event.preventDefault();
-      window.toggleTheme();
+      toggleTheme();
     });
-  });
+  }
+
+  applySavedTheme();
+  window.toggleTheme = toggleTheme;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeControls, { once: true });
+  } else {
+    initThemeControls();
+  }
 })();
