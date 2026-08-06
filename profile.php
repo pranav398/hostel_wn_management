@@ -9,10 +9,33 @@
                 <div class="space-y-2 text-center sm:text-left flex-1">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div>
-                            <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2">Alex Rivera
+                            <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2"><?=$_SESSION['name']?>
                                 <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 text-xs font-bold">Resident Student</span>
                             </h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Titanium Block • Room B-304 • Student ID STU20268841</p>
+                            <?php
+                                $hostelMap = [
+                                    '15' => 'Trident',
+                                    '16' => 'Olympus'
+                                ];
+                                $wingMap = [
+                                    '1' => 'A',
+                                    '2' => 'B',
+                                    '3' => 'C'
+                                ];
+                                $deptMap = [
+
+                                ];
+                                $ranksMap = [
+                                    100 => "Legendary",
+                                    95  => "Master",
+                                    90  => "Expert",
+                                    80  => "Skilled",
+                                    70  => "Regular",
+                                    50  => "Casual",
+                                    0   => "Unreliable"
+                                ];
+                            ?>
+                            <p class="text-xs text-slate-500 mt-0.5">Hostel <?=$hostelMap[substr($_SESSION['hn'],0,2)] ?? substr($_SESSION['hn'],0,2)?> • Room <?=$wingMap[substr($_SESSION['hn'],2,1)] ?? ''?>-<?=$_SESSION['rn']?> • Student ID <?=$_SESSION['roll']?></p>
                         </div>
 
                         <a href="settings.php" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 justify-center">
@@ -22,8 +45,8 @@
                     </div>
 
                     <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
-                        <span class="flex items-center gap-1.5"><i data-lucide="mail" class="w-4 h-4 text-blue-600"></i> alex.rivera@hostel.edu</span>
-                        <span class="flex items-center gap-1.5"><i data-lucide="phone" class="w-4 h-4 text-blue-600"></i> +1 (555) 234-5678</span>
+                        <span class="flex items-center gap-1.5"><i data-lucide="graduation-cap" class="w-4 h-4 text-blue-600"></i> <?=$deptMap[$_SESSION['dept']] ?? ''?> Department</span>
+                        <span class="flex items-center gap-1.5"><i data-lucide="phone" class="w-4 h-4 text-blue-600"></i>+91 <?=$_SESSION['contact']?></span>
                         <span class="flex items-center gap-1.5"><i data-lucide="shield" class="w-4 h-4 text-emerald-600"></i> Verified Resident</span>
                     </div>
                 </div>
@@ -38,41 +61,58 @@
                 </div>
 
                 <div>
-                    <h3 class="text-3xl font-black">3 / 4 Tokens</h3>
-                    <p class="text-xs text-blue-100 mt-1">1 token deducted for active Machine 03 cycle.</p>
+                    <h3 class="text-3xl font-black"><?=$_SESSION['credits']?> / 2 Tokens</h3>
+                    <p class="text-xs text-blue-100 mt-1">1 token deducted for each washing cycle.</p>
                 </div>
 
                 <div class="w-full bg-blue-900/50 h-3 rounded-full overflow-hidden p-0.5 border border-blue-400/30">
-                    <div class="bg-white h-full rounded-full w-[75%]"></div>
+                    <div class="bg-white h-full rounded-full w-[<?=50*$_SESSION['credits']?>%]"></div>
                 </div>
 
-                <p class="text-[11px] text-blue-200">Tokens are automatically refilled by hostel warden office every week.</p>
+                <p class="text-[11px] text-blue-200">Tokens are automatically refilled by server every week.</p>
             </div>
 
             <div class="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between">
                     <i data-lucide="washing-machine" class="w-6 h-6 text-blue-600 mb-2"></i>
+                    <?php
+                        $roll = $_SESSION['roll'];
+                        $sql1 = "SELECT * FROM `log` WHERE `roll` = '$roll' ORDER BY `time` DESC";
+                        $result1 = $conn->query($sql1);
+                        $b_no = $result1->num_rows;
+                        $h_no = 0;
+                        while($row1 = $result1->fetch_assoc()){
+                            if($row1['status']) $h_no++;
+                        }
+                        $rate = round(($h_no/$b_no)*100);
+                        foreach ($ranksMap as $min => $name) {
+                            if ($rate >= $min) {
+                                $rank = $name;
+                                break;
+                            }
+                        }
+                    ?>
                     <div>
                         <p class="text-xs text-slate-400 font-medium">Total Washes</p>
-                        <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">28 <span class="text-xs font-normal text-slate-400">Cycles</span></p>
+                        <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5"><?=$h_no?> <span class="text-xs font-normal text-slate-400">Cycles</span></p>
                     </div>
                 </div>
 
                 <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between">
                     <i data-lucide="clock" class="w-6 h-6 text-emerald-600 mb-2"></i>
                     <div>
-                        <p class="text-xs text-slate-400 font-medium">On-Time Rate</p>
-                        <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">96.5% <span class="text-xs font-normal text-emerald-600">Punctual</span></p>
+                        <p class="text-xs text-slate-400 font-medium">Completion Rate</p>
+                        <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5"><?=$rate?>% <span class="text-xs font-normal text-emerald-600"><?=$rank?></span></p>
                     </div>
                 </div>
 
-                <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between col-span-2 sm:col-span-1">
+                <!-- <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between col-span-2 sm:col-span-1">
                     <i data-lucide="leaf" class="w-6 h-6 text-emerald-500 mb-2"></i>
                     <div>
                         <p class="text-xs text-slate-400 font-medium">Eco Water Saved</p>
                         <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">420 <span class="text-xs font-normal text-slate-400">Liters</span></p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 

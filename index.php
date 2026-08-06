@@ -40,6 +40,7 @@
                     $_SESSION["hn"] = $user["hn"];
                     $_SESSION["rn"] = $user["rn"];
                     $_SESSION["credits"] = $user["credits"];
+                    $_SESSION["dept"] = $user["dept"];
                     $_SESSION["w_no"] = $roww['count'];
                     $_SESSION["d_no"] = $rowd['count'];
 
