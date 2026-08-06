@@ -60,17 +60,17 @@
 
                 <div class="relative">
                     <button onclick="toggleUserMenu()" class="flex items-center gap-2 p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition">
-                        <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-300 flex items-center justify-center text-xs font-bold">U</div>
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-300 flex items-center justify-center text-xs font-bold"><?=substr($_SESSION['name'],0,1)?></div>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 hidden sm:block"></i>
                     </button>
 
                     <div id="user-dropdown-menu" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-2 z-50">
                         <div class="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1">
-                            <p class="text-xs font-bold text-slate-900 dark:text-white">User</p>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400">Session profile pending</p>
+                            <p class="text-xs font-bold text-slate-900 dark:text-white"><?=$_SESSION['name']?></p>
+                            <!-- <p class="text-[11px] text-slate-500 dark:text-slate-400">Session profile pending</p> -->
                             <div class="mt-2 flex items-center justify-between px-2 py-1 bg-blue-50 dark:bg-blue-950/50 rounded-lg text-blue-700 dark:text-blue-300 text-[11px] font-semibold">
                                 <span>Wash Tokens</span>
-                                <span class="px-1.5 py-0.5 bg-blue-600 text-white rounded text-[10px]">--</span>
+                                <span class="px-1.5 py-0.5 bg-blue-600 text-white rounded text-[10px]"><?=$_SESSION['credits']?>/2</span>
                             </div>
                         </div>
 
@@ -141,10 +141,8 @@
                 <div class="p-4 border-t border-slate-200/80 dark:border-slate-800">
                     <div class="p-3.5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-sky-500/10 border border-blue-200/50 dark:border-blue-900/40">
                         <div class="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-slate-100 mb-1">
-                            <span class="flex items-center gap-1.5">
-                                <i data-lucide="zap" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i> Laundry Pass
-                            </span>
-                            <span class="text-blue-600 dark:text-blue-400">1/2 Left</span>
+                            <span class="flex items-center gap-1.5"><i data-lucide="zap" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i> Tokens</span>
+                            <span class="text-blue-600 dark:text-blue-400"><?=$_SESSION['credits']?>/2 Left</span>
                         </div>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed mb-2.5">Weekly quota resets every Monday at 00:00 AM.</p>
                         <a href="booking.php" class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs transition">
