@@ -5,6 +5,16 @@
     $msg = "";
     $warn="error";
 
+    if(isset($_GET['run']) && $_GET['run'] == 1){
+        echo "<script>
+            window.addEventListener('load', function () {
+                if (window.showToast) {
+                    showToast('Password Updated Successfully!', 'success');
+                }
+            });
+        </script>";
+    }
+
     if (isset($_POST["submit"])) {
         $username = trim($_POST["ldap"]);
         $password = $_POST["pass"];
@@ -44,8 +54,8 @@
                     $_SESSION["w_no"] = $roww['count'];
                     $_SESSION["d_no"] = $rowd['count'];
 
-                    $msg = "Successfuly Logged In";
-                    $warn = "success";
+                    echo"<script>window.location.href = window.location.pathname;</script>";
+                    exit;
                 } 
                 else {
                     if($user["pass"] == '0'){
@@ -164,7 +174,6 @@
             window.addEventListener('load', function () {
                 if (window.showToast) {
                     showToast(" . json_encode($msg) . ", " . json_encode($warn) . ");
-                    window.location.href='';
                 }
             });
         </script>";    

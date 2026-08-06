@@ -5,16 +5,49 @@
 (function () {
   'use strict';
 
-  function applySavedTheme() {
-    const savedTheme = localStorage.getItem('aurawash_theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function determineSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
 
-    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+  function getSavedTheme() {
+    return localStorage.getItem('aurawash_theme') || 'system';
+  }
+
+  function applyTheme(theme, save = true) {
+    const isDarkTheme = theme === 'dark' || (theme === 'system' && determineSystemTheme() === 'dark');
+
+    if (isDarkTheme) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
+
+    if (save) {
+      if (theme === 'system') {
+        localStorage.removeItem('aurawash_theme');
+      } else {
+        localStorage.setItem('aurawash_theme', theme);
+      }
+    }
+
+    updateIcons();
+    updateThemeRadios();
   }
+
+  function applySavedTheme() {
+    const savedTheme = getSavedTheme();
+    applyTheme(savedTheme, false);
+  }
+
+  function updateThemeRadios() {
+    const themeInputs = document.querySelectorAll('input[name="theme"]');
+    const savedTheme = getSavedTheme();
+
+    themeInputs.forEach((input) => {
+      input.checked = input.value === savedTheme;
+    });
+  }
+
 
   function updateIcons() {
     const themeButtons = document.querySelectorAll('.theme-toggle-btn');
@@ -38,32 +71,75 @@
 
   function toggleTheme() {
     const isDarkNow = document.documentElement.classList.contains('dark');
-
-    if (isDarkNow) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('aurawash_theme', 'light');
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('aurawash_theme', 'dark');
-    }
-
-    updateIcons();
+    applyTheme(isDarkNow ? 'light' : 'dark');
 
     if (window.showToast) {
-      window.showToast(`Switched to ${!isDarkNow ? 'Dark' : 'Light'} Mode`, 'info');
+      window.showToast(`Switched to ${isDarkNow ? 'Light' : 'Dark'} Mode`, 'info');
+    }
+  }
+
+  function clearLocalPreferences() {
+    localStorage.removeItem('aurawash_theme');
+    applyTheme('system', false);
+
+    if (window.showToast) {
+      window.showToast('Local preferences cleared. System theme is now active.', 'error');
     }
   }
 
   function initThemeControls() {
     updateIcons();
+    updateThemeRadios();
 
-    document.addEventListener('click', (event) => {
-      const themeButton = event.target.closest('.theme-toggle-btn');
-      if (!themeButton) return;
+    const themeInputs = document.querySelectorAll('input[name="theme"]');
+    themeInputs.forEach((input) => {
+      input.addEventListener('change', () => {
+        if (!input.checked) return;
+        applyTheme(input.value);
 
-      event.preventDefault();
-      toggleTheme();
+        const label = input.value === 'system' ? 'System Default' : `${input.value[0].toUpperCase()}${input.value.slice(1)}`;
+        if (window.showToast) {
+          window.showToast(`${label} theme selected.`, 'success');
+        }
+      });
     });
+
+    const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (colorSchemeQuery.addEventListener) {
+      colorSchemeQuery.addEventListener('change', () => {
+        if (getSavedTheme() === 'system') {
+          applyTheme('system', false);
+          if (window.showToast) {
+            window.showToast('System theme updated to match your OS preference.', 'info');
+          }
+        }
+      });
+    } else if (colorSchemeQuery.addListener) {
+      colorSchemeQuery.addListener(() => {
+        if (getSavedTheme() === 'system') {
+          applyTheme('system', false);
+          if (window.showToast) {
+            window.showToast('System theme updated to match your OS preference.', 'info');
+          }
+        }
+      });
+    }
+
+    const themeButton = document.querySelector('.theme-toggle-btn');
+    if (themeButton) {
+      themeButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        toggleTheme();
+      });
+    }
+
+    const clearButton = document.getElementById('clear-preferences-btn');
+    if (clearButton) {
+      clearButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        clearLocalPreferences();
+      });
+    }
   }
 
   applySavedTheme();

@@ -35,7 +35,7 @@
     $wmMap = [];
 
     while($wmrow = $wmresult->fetch_assoc()){
-        $wmMap$[] = $wmrow;
+        $wmMap[] = $wmrow;
     }
 
     $logsql = "SELECT * FROM `log` WHERE `wm_id` LIKE '{$hn}___' AND `status` = '1' AND DATE(`time`) = '$sqlDate'";

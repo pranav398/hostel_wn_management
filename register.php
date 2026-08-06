@@ -191,7 +191,6 @@
             window.addEventListener('load', function () {
                 if (window.showToast) {
                     showToast(" . json_encode($msg) . ", " . json_encode($warn) . ");
-                    window.location.href='';
                 }
             });
         </script>";
