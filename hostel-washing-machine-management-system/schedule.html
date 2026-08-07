@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Schedule | AuraWash Laundry OS</title>
+  <!-- Google Font Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS & Custom Styles -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased flex flex-col selection:bg-blue-500 selection:text-white">
+
+  <!-- Shared Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main Body Layout -->
+  <div class="flex flex-1 min-h-[calc(100vh-4rem)]">
+    <!-- Shared Sidebar Container -->
+    <div id="app-sidebar"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl mx-auto w-full space-y-6">
+      
+      <!-- Top Title Bar & Calendar Navigation -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="calendar-days" class="w-7 h-7 text-blue-600"></i>
+            Weekly Machine Schedule
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Live Google Calendar-style timetable across all 8 hostel washing machines.</p>
+        </div>
+
+        <!-- Controls & Date Nav -->
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1 shadow-xs">
+            <button onclick="showToast('Loading previous week', 'info')" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <span class="px-3 text-xs font-bold text-slate-900 dark:text-white">Aug 3 – Aug 9, 2026</span>
+            <button onclick="showToast('Loading next week', 'info')" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <a href="booking.html" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1.5">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Book Slot</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Legend & Filter Bar -->
+      <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-wrap items-center justify-between gap-4 text-xs font-medium">
+        <!-- Legend Items -->
+        <div class="flex items-center gap-4 flex-wrap">
+          <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Legend:</span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded bg-blue-600 shadow-xs"></span> Your Booking
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded bg-indigo-100 dark:bg-indigo-950/80 border border-indigo-300 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300"></span> Other Resident
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-300"></span> Maintenance
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800"></span> Open Slot
+          </span>
+        </div>
+
+        <!-- Floor Filter Dropdown -->
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400 text-xs">Filter Floor:</span>
+          <select class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-200">
+            <option>All Floors (WM 01 - 08)</option>
+            <option>Ground Floor (Bay A & B)</option>
+            <option>First Floor (Bay C)</option>
+            <option>Second Floor (Bay D)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Schedule Matrix Table Container -->
+      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-x-auto">
+        <div class="min-w-[800px]">
+          
+          <!-- Machine Column Headers -->
+          <div class="grid grid-cols-9 border-b border-slate-200 dark:border-slate-800 pb-3 mb-2 text-center">
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider text-left pl-2">Time</div>
+            <div class="text-xs font-extrabold text-slate-900 dark:text-white">WM-01 <span class="block text-[10px] font-normal text-slate-400">Ground A</span></div>
+            <div class="text-xs font-extrabold text-slate-900 dark:text-white">WM-02 <span class="block text-[10px] font-normal text-slate-400">Ground A</span></div>
+            <div class="text-xs font-extrabold text-blue-600 dark:text-blue-400">WM-03 ★ <span class="block text-[10px] font-normal text-blue-500">Ground B</span></div>
+            <div class="text-xs font-extrabold text-slate-900 dark:text-white">WM-04 <span class="block text-[10px] font-normal text-slate-400">Ground B</span></div>
+            <div class="text-xs font-extrabold text-slate-900 dark:text-white">WM-05 <span class="block text-[10px] font-normal text-slate-400">1st Bay C</span></div>
+            <div class="text-xs font-extrabold text-amber-600 dark:text-amber-400">WM-06 🛠 <span class="block text-[10px] font-normal text-amber-500">1st Bay C</span></div>
+            <div class="text-xs font-extrabold text-slate-900 dark:text-white">WM-07 <span class="block text-[10px] font-normal text-slate-400">2nd Bay D</span></div>
+            <div class="text-xs font-extrabold text-slate-900 dark:text-white">WM-08 <span class="block text-[10px] font-normal text-slate-400">2nd Bay D</span></div>
+          </div>
+
+          <!-- Time Rows Grid -->
+          <div class="space-y-2 text-xs">
+            
+            <!-- 08:00 AM Row -->
+            <div class="grid grid-cols-9 items-center gap-2 py-1.5 border-b border-slate-100 dark:border-slate-800/60">
+              <span class="font-mono font-bold text-slate-400 text-xs">08:00 AM</span>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate" title="David K. (B-201)">
+                David K. (B-201)
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate" title="Sarah C. (C-102)">
+                Sarah C. (C-102)
+              </div>
+              <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 font-bold text-[10px] text-center">
+                Filter Cleaning
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+            </div>
+
+            <!-- 10:00 AM Row -->
+            <div class="grid grid-cols-9 items-center gap-2 py-1.5 border-b border-slate-100 dark:border-slate-800/60">
+              <span class="font-mono font-bold text-slate-400 text-xs">10:00 AM</span>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate">
+                Michael T. (A-108)
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 font-bold text-[10px] text-center">
+                Filter Cleaning
+              </div>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate">
+                Marcus V. (A-402)
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+            </div>
+
+            <!-- 15:30 PM (NOW) Row with Highlight -->
+            <div class="grid grid-cols-9 items-center gap-2 py-2 bg-blue-50/40 dark:bg-blue-950/20 rounded-2xl border border-blue-200/80 dark:border-blue-900/60 p-1">
+              <span class="font-mono font-extrabold text-blue-600 dark:text-blue-400 text-xs flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span> 15:30 NOW
+              </span>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate">
+                David K.
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] text-center cursor-pointer hover:bg-emerald-100" onclick="location.href='booking.html'">
+                Available
+              </div>
+              
+              <!-- YOUR ACTIVE WASH HERE -->
+              <div class="p-2 rounded-xl bg-blue-600 text-white font-extrabold text-[11px] text-center shadow-md border-2 border-blue-400 animate-pulse">
+                ★ Alex R. (Your Wash)
+              </div>
+
+              <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] text-center cursor-pointer hover:bg-emerald-100" onclick="location.href='booking.html'">
+                Available
+              </div>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate">
+                Sarah C.
+              </div>
+              <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 font-bold text-[10px] text-center">
+                Filter Repair
+              </div>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate">
+                Marcus V.
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] text-center cursor-pointer hover:bg-emerald-100" onclick="location.href='booking.html'">
+                Available
+              </div>
+            </div>
+
+            <!-- 18:00 PM Row -->
+            <div class="grid grid-cols-9 items-center gap-2 py-1.5 border-b border-slate-100 dark:border-slate-800/60">
+              <span class="font-mono font-bold text-slate-400 text-xs">18:00 PM</span>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-blue-600 text-white font-bold text-[11px] text-center shadow-xs">
+                ★ Alex R. (Reserved)
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate">
+                James L. (B-102)
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href='booking.html'">
+                + Book
+              </div>
+              <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 font-semibold text-[11px] truncate">
+                Elena R. (C-401)
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Shared Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Scripts -->
+  <script src="./assets/js/theme.js"></script>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>

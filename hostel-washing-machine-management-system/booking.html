@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Machine | AuraWash Laundry OS</title>
+  <!-- Google Font Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS & Custom Styles -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased flex flex-col selection:bg-blue-500 selection:text-white">
+
+  <!-- Shared Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main Body Layout -->
+  <div class="flex flex-1 min-h-[calc(100vh-4rem)]">
+    <!-- Shared Sidebar Container -->
+    <div id="app-sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl mx-auto w-full space-y-6">
+      
+      <!-- Page Title & Info Banner -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="calendar-plus" class="w-7 h-7 text-blue-600"></i>
+            Book Washing Machine Slot
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Select date, machine location, and time slot to reserve your wash cycle.</p>
+        </div>
+
+        <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs font-semibold">
+          <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
+          <span>Fair Use Policy: Maximum 1 active booking allowed per resident.</span>
+        </div>
+      </div>
+
+      <!-- Main Booking Workspace Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left 2 Cols: Date, Machine & Time Slot Grid Selection -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- Step 1: Date Selector -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Step 1: Choose Date</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="date-picker-grid">
+              <button onclick="selectDate(this, 'Today, Aug 4')" class="date-btn p-3 rounded-2xl border-2 border-blue-600 bg-blue-50 dark:bg-blue-950/50 text-left transition cursor-pointer">
+                <span class="block text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">TODAY</span>
+                <span class="block text-sm font-extrabold text-slate-900 dark:text-white">Aug 4, Tue</span>
+                <span class="block text-[11px] text-slate-500 mt-1">12 slots open</span>
+              </button>
+
+              <button onclick="selectDate(this, 'Tomorrow, Aug 5')" class="date-btn p-3 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition cursor-pointer">
+                <span class="block text-[10px] font-bold text-slate-400 uppercase">TOMORROW</span>
+                <span class="block text-sm font-extrabold text-slate-900 dark:text-white">Aug 5, Wed</span>
+                <span class="block text-[11px] text-slate-500 mt-1">18 slots open</span>
+              </button>
+
+              <button onclick="selectDate(this, 'Thu, Aug 6')" class="date-btn p-3 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition cursor-pointer">
+                <span class="block text-[10px] font-bold text-slate-400 uppercase">THU</span>
+                <span class="block text-sm font-extrabold text-slate-900 dark:text-white">Aug 6, Thu</span>
+                <span class="block text-[11px] text-slate-500 mt-1">22 slots open</span>
+              </button>
+
+              <button onclick="selectDate(this, 'Fri, Aug 7')" class="date-btn p-3 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition cursor-pointer">
+                <span class="block text-[10px] font-bold text-slate-400 uppercase">FRI</span>
+                <span class="block text-sm font-extrabold text-slate-900 dark:text-white">Aug 7, Fri</span>
+                <span class="block text-[11px] text-slate-500 mt-1">15 slots open</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Machine Selector -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Step 2: Choose Washing Machine</label>
+              <span class="text-xs text-slate-500">Bay Filter: <strong class="text-blue-600">Titanium Ground Floor</strong></span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="machine-picker-grid">
+              <button onclick="selectMachine(this, 'WM-01', 'Front Load 10kg', 'Ground Bay A')" class="machine-btn p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition flex items-center justify-between cursor-pointer">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center">
+                    WM-01
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white">Machine 01 (10kg)</h4>
+                    <p class="text-[11px] text-slate-500">Ground Bay A • Health 98%</p>
+                  </div>
+                </div>
+                <i data-lucide="check-circle" class="w-5 h-5 text-blue-600 opacity-0 check-icon"></i>
+              </button>
+
+              <button onclick="selectMachine(this, 'WM-02', 'Front Load 10kg', 'Ground Bay A')" class="machine-btn p-3.5 rounded-2xl border-2 border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 text-left transition flex items-center justify-between cursor-pointer">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+                    WM-02
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white">Machine 02 (10kg)</h4>
+                    <p class="text-[11px] text-slate-500">Ground Bay A • Health 95%</p>
+                  </div>
+                </div>
+                <i data-lucide="check-circle" class="w-5 h-5 text-blue-600 opacity-100 check-icon"></i>
+              </button>
+
+              <button onclick="selectMachine(this, 'WM-04', 'Front Load 10kg', 'Ground Bay B')" class="machine-btn p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition flex items-center justify-between cursor-pointer">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center">
+                    WM-04
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white">Machine 04 (10kg)</h4>
+                    <p class="text-[11px] text-slate-500">Ground Bay B • Health 89%</p>
+                  </div>
+                </div>
+                <i data-lucide="check-circle" class="w-5 h-5 text-blue-600 opacity-0 check-icon"></i>
+              </button>
+
+              <button onclick="selectMachine(this, 'WM-08', 'Heavy Duty 12kg', 'Second Bay D')" class="machine-btn p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition flex items-center justify-between cursor-pointer">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center">
+                    WM-08
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-900 dark:text-white">Machine 08 (12kg Heavy)</h4>
+                    <p class="text-[11px] text-slate-500">Second Bay D • Health 97%</p>
+                  </div>
+                </div>
+                <i data-lucide="check-circle" class="w-5 h-5 text-blue-600 opacity-0 check-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Interactive Time Slots Grid -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Step 3: Select Time Slot</label>
+              
+              <!-- Color Legend -->
+              <div class="flex items-center gap-3 text-[11px] font-medium">
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Available</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700"></span> Booked</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> Selected</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="time-slots-grid">
+              <button disabled class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/50 text-slate-400 cursor-not-allowed text-xs font-semibold flex flex-col items-center justify-center border border-slate-200/50 dark:border-slate-800" title="Booked by David Kim (Room B-201)">
+                <span>07:00 - 08:00</span>
+                <span class="text-[9px] uppercase font-bold text-slate-400">Booked</span>
+              </button>
+
+              <button disabled class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/50 text-slate-400 cursor-not-allowed text-xs font-semibold flex flex-col items-center justify-center border border-slate-200/50 dark:border-slate-800" title="Booked by Sarah Chen (Room C-102)">
+                <span>08:00 - 09:00</span>
+                <span class="text-[9px] uppercase font-bold text-slate-400">Booked</span>
+              </button>
+
+              <button onclick="selectSlot(this, '09:00 - 10:00')" class="slot-btn p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold flex flex-col items-center justify-center transition cursor-pointer">
+                <span>09:00 - 10:00</span>
+                <span class="text-[9px] uppercase font-bold text-emerald-600">Available</span>
+              </button>
+
+              <button onclick="selectSlot(this, '10:00 - 11:00')" class="slot-btn p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold flex flex-col items-center justify-center transition cursor-pointer">
+                <span>10:00 - 11:00</span>
+                <span class="text-[9px] uppercase font-bold text-emerald-600">Available</span>
+              </button>
+
+              <button onclick="selectSlot(this, '11:00 - 12:00')" class="slot-btn p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold flex flex-col items-center justify-center transition cursor-pointer">
+                <span>11:00 - 12:00</span>
+                <span class="text-[9px] uppercase font-bold text-emerald-600">Available</span>
+              </button>
+
+              <button onclick="selectSlot(this, '14:00 - 15:00')" class="slot-btn p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold flex flex-col items-center justify-center transition cursor-pointer">
+                <span>14:00 - 15:00</span>
+                <span class="text-[9px] uppercase font-bold text-emerald-600">Available</span>
+              </button>
+
+              <button onclick="selectSlot(this, '18:00 - 19:00')" class="slot-btn p-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs flex flex-col items-center justify-center border-2 border-blue-600 shadow-md transition cursor-pointer">
+                <span>18:00 - 19:00</span>
+                <span class="text-[9px] uppercase font-bold text-blue-200">Selected</span>
+              </button>
+
+              <button onclick="selectSlot(this, '19:00 - 20:00')" class="slot-btn p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold flex flex-col items-center justify-center transition cursor-pointer">
+                <span>19:00 - 20:00</span>
+                <span class="text-[9px] uppercase font-bold text-emerald-600">Available</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Col: Booking Summary & Confirmation Card -->
+        <div class="space-y-6">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xl space-y-6 sticky top-24">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 text-[10px] font-bold uppercase tracking-wider">Booking Summary</span>
+              <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-1">Reservation Details</h3>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-slate-500">Date</span>
+                <span id="summary-date" class="font-bold text-slate-900 dark:text-white">Today, Aug 4</span>
+              </div>
+
+              <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-slate-500">Selected Machine</span>
+                <span id="summary-machine" class="font-bold text-slate-900 dark:text-white">WM-02 (Front Load 10kg)</span>
+              </div>
+
+              <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-slate-500">Time Window</span>
+                <span id="summary-time" class="font-bold text-blue-600 dark:text-blue-400">18:00 - 19:00 PM</span>
+              </div>
+
+              <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-slate-500">Hostel Location</span>
+                <span id="summary-location" class="font-bold text-slate-900 dark:text-white">Ground Bay A</span>
+              </div>
+
+              <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-slate-500">Wash Pass Cost</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">1 Token (3 Remaining)</span>
+              </div>
+            </div>
+
+            <!-- Cycle Selection Dropdown -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5">Preferred Wash Preset</label>
+              <select id="cycle-preset" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="Cottons 60°C (45m)">Cottons 60°C (45 Mins)</option>
+                <option value="Quick Eco 30°C (30m)">Quick Eco 30°C (30 Mins)</option>
+                <option value="Heavy Spin + Dry (60m)">Heavy Spin + Softener (60 Mins)</option>
+                <option value="Delicates / Wool (30m)">Delicates / Wool (30 Mins)</option>
+              </select>
+            </div>
+
+            <!-- Confirm Button -->
+            <button onclick="confirmBookingModal()" class="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl text-xs font-bold shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <i data-lucide="check" class="w-4 h-4"></i>
+              <span>Confirm Slot Reservation</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="booking-modal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-6">
+      <div class="text-center">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="check-circle" class="w-8 h-8"></i>
+        </div>
+        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Confirm Machine Booking</h3>
+        <p class="text-xs text-slate-500 mt-1">Please verify your booking details before generating your door pass code.</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 space-y-2 text-xs">
+        <div class="flex justify-between">
+          <span class="text-slate-500">Machine:</span>
+          <span class="font-bold text-slate-900 dark:text-white" id="modal-machine">WM-02 (Ground Bay A)</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Time Slot:</span>
+          <span class="font-bold text-blue-600" id="modal-time">Today, 18:00 - 19:00</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Resident:</span>
+          <span class="font-bold text-slate-900 dark:text-white">Alex Rivera (B-304)</span>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="closeModal('booking-modal')" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-2xl text-xs font-bold transition cursor-pointer">
+          Cancel
+        </button>
+        <button onclick="finalizeBooking()" class="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-bold shadow-lg shadow-blue-500/25 transition cursor-pointer">
+          Complete Booking
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Scripts -->
+  <script src="./assets/js/theme.js"></script>
+  <script src="./assets/js/main.js"></script>
+  <script>
+    let selectedDateVal = 'Today, Aug 4';
+    let selectedMachineVal = 'WM-02 (Front Load 10kg)';
+    let selectedSlotVal = '18:00 - 19:00 PM';
+
+    function selectDate(btn, dateStr) {
+      document.querySelectorAll('.date-btn').forEach(b => {
+        b.className = 'date-btn p-3 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition cursor-pointer';
+      });
+      btn.className = 'date-btn p-3 rounded-2xl border-2 border-blue-600 bg-blue-50 dark:bg-blue-950/50 text-left transition cursor-pointer';
+      selectedDateVal = dateStr;
+      document.getElementById('summary-date').innerText = dateStr;
+    }
+
+    function selectMachine(btn, id, name, bay) {
+      document.querySelectorAll('.machine-btn').forEach(b => {
+        b.className = 'machine-btn p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-left transition flex items-center justify-between cursor-pointer';
+        b.querySelector('.check-icon')?.classList.add('opacity-0');
+      });
+      btn.className = 'machine-btn p-3.5 rounded-2xl border-2 border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 text-left transition flex items-center justify-between cursor-pointer';
+      btn.querySelector('.check-icon')?.classList.remove('opacity-0');
+      selectedMachineVal = `${id} (${name})`;
+      document.getElementById('summary-machine').innerText = selectedMachineVal;
+      document.getElementById('summary-location').innerText = bay;
+    }
+
+    function selectSlot(btn, timeStr) {
+      document.querySelectorAll('.slot-btn').forEach(b => {
+        b.className = 'slot-btn p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold flex flex-col items-center justify-center transition cursor-pointer';
+      });
+      btn.className = 'slot-btn p-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs flex flex-col items-center justify-center border-2 border-blue-600 shadow-md transition cursor-pointer';
+      selectedSlotVal = `${timeStr} PM`;
+      document.getElementById('summary-time').innerText = selectedSlotVal;
+    }
+
+    function confirmBookingModal() {
+      document.getElementById('modal-machine').innerText = selectedMachineVal;
+      document.getElementById('modal-time').innerText = `${selectedDateVal}, ${selectedSlotVal}`;
+      openModal('booking-modal');
+    }
+
+    function finalizeBooking() {
+      closeModal('booking-modal');
+      const pin = Math.floor(1000 + Math.random() * 9000).toString();
+      
+      AuraWashDB.addBooking({
+        id: 'BK-' + Math.floor(1000 + Math.random() * 9000),
+        machineId: selectedMachineVal.split(' ')[0],
+        machineName: selectedMachineVal,
+        slotDate: new Date().toISOString().split('T')[0],
+        slotTime: selectedSlotVal,
+        cycleType: document.getElementById('cycle-preset').value,
+        status: 'Confirmed',
+        pinCode: pin
+      });
+
+      showToast(`Slot reserved successfully! Door unlock code is ${pin}`, 'success', 'Booking Confirmed');
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

@@ -121,10 +121,14 @@
                             <?=$maindiv?>          
                                 <?php
                                     foreach($wmMap as $machine){
+                                        $startDiv = (strtotime($start_time)+90*60) < time() ? '<div class="relative"><div class="pointer-events-none opacity-50">' : '';
+                                        $endDiv = (strtotime($start_time)+90*60) < time() ? '</div><div class="absolute inset-0 bg-slate-900/20 rounded-xl"></div></div>' : '';
                                         if($machine['working'] == 0) {
                                             $att = 'class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 font-bold text-[10px] text-center"';
                                             $content = 'Maintainance'; 
                                         } elseif(!isset($logMap[$machine['wm_id']][$start_time]) || $logMap[$machine['wm_id']][$start_time]['status'] != '1'){
+                                            $startDiv = (strtotime($start_time)+45*60) < time() ? '<div class="relative"><div class="pointer-events-none opacity-50">' : '';
+                                            $endDiv = (strtotime($start_time)+45*60) < time() ? '</div><div class="absolute inset-0 bg-slate-900/20 rounded-xl"></div></div>' : '';
                                             $att = 'class="p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-center font-bold text-[10px] hover:bg-emerald-100 transition cursor-pointer" onclick="location.href=\'booking.php\'"';
                                             $content = '+ Book';
                                         } elseif($logMap[$machine['wm_id']][$start_time]['roll']==$roll){
@@ -135,7 +139,7 @@
                                             $content = preg_replace('/^(\S+).*?(\([^)]*\))$/', '$1 $2',$logMap[$machine['wm_id']][$start_time]['iden']);
                                         }
                                 ?>
-                                        <div <?=$att?>><?=$content?></div>
+                                        <?=$startDiv?><div <?=$att?>><?=$content?></div><?=$endDiv?>
                                 <?php
                                     }
                                 ?>

@@ -7,6 +7,15 @@
     }
 
     include "includes/db.php";
+
+    $hostelMap = [
+        '151' => 'Trident - Hostel 15 - Wing A',
+        '152' => 'Trident - Hostel 15 - Wing B',
+        '153' => 'Trident - Hostel 15 - Wing C',
+        '161' => 'Olympus - Hostel 16 - Wing A',
+        '162' => 'Olympus - Hostel 16 - Wing B',
+        '163' => 'Olympus - Hostel 16 - Wing C'
+    ];
 ?>
 
 <!DOCTYPE html>

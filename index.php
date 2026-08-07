@@ -35,14 +35,6 @@
                     $hn = $user["hn"];
                     $roll = $user["roll"];
 
-                    $sqlw = "SELECT COUNT(*) AS count FROM `wm` WHERE `wm_id` LIKE '{$hn}__1'";
-                    $resultw = $conn->query($sqlw);
-                    $roww = $resultw->fetch_assoc();
-
-                    $sqld = "SELECT COUNT(*) AS count FROM `wm` WHERE `wm_id` LIKE '{$hn}__2'";
-                    $resultd = $conn->query($sqld);
-                    $rowd = $resultd->fetch_assoc();
-
                     // 3. Create session
                     $_SESSION["roll"] = $user["roll"];
                     $_SESSION["name"] = $user["name"];

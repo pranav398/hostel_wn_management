@@ -36,13 +36,20 @@
                 <div>
                     <?php
                         $hn = $_SESSION['hn'];
+                        
+                        $sqlw1 = "SELECT COUNT(*) AS count FROM `wm` WHERE `wm_id` LIKE '{$hn}__1'";
+                        $resultw1 = $conn->query($sqlw1);
+                        $roww1 = $resultw1->fetch_assoc();
+
+                    
+
                         $sqlw = "SELECT COUNT(*) AS count FROM (SELECT `wm_id` FROM `log` WHERE `wm_id` LIKE '{$hn}__1' AND `status` = '1' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 89 MINUTE) AND NOW() UNION SELECT `wm_id` FROM `wm` WHERE `wm_id` LIKE '{$hn}__1' AND `working` = '0') AS combined;";
                         $resultw = $conn->query($sqlw);
                         $roww = $resultw->fetch_assoc();
-                        $ww = $_SESSION['w_no'] - $roww['count'];
+                        $ww = $roww1['count'] - $roww['count'];
                     ?>
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Available Washing Machines</p>
-                    <p class="text-xl font-bold text-slate-900 dark:text-white mt-0.5"><?=$ww?> <span class="text-xs font-normal text-slate-400">/ <?=$_SESSION['w_no']?> total</span></p>
+                    <p class="text-xl font-bold text-slate-900 dark:text-white mt-0.5"><?=$ww?> <span class="text-xs font-normal text-slate-400">/ <?=$roww1['count']?> total</span></p>
                 </div>
             </div>
 
@@ -52,13 +59,17 @@
                 </div>
                 <div>
                     <?php
+                        $sqld1 = "SELECT COUNT(*) AS count FROM `wm` WHERE `wm_id` LIKE '{$hn}__2'";
+                        $resultd1 = $conn->query($sqld1);
+                        $rowd1 = $resultd1->fetch_assoc();
+
                         $sqld = "SELECT COUNT(*) AS count FROM (SELECT `wm_id` FROM `log` WHERE `wm_id` LIKE '{$hn}__2' AND `status` = '1' AND `time` BETWEEN DATE_SUB(NOW(), INTERVAL 89 MINUTE) AND NOW() UNION SELECT `wm_id` FROM `wm` WHERE `wm_id` LIKE '{$hn}__2' AND `working` = '0') AS combined;";
                         $resultd = $conn->query($sqld);
                         $rowd = $resultd->fetch_assoc();
-                        $wd = $_SESSION['d_no'] - $rowd['count'];
+                        $wd = $rowd1['count'] - $rowd['count'];
                     ?>
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Available Dryers</p>
-                    <p class="text-xl font-bold text-slate-900 dark:text-white mt-0.5"><?=$wd?> <span class="text-xs font-normal text-slate-400">/ <?=$_SESSION['d_no']?> total</span></p>
+                    <p class="text-xl font-bold text-slate-900 dark:text-white mt-0.5"><?=$wd?> <span class="text-xs font-normal text-slate-400">/ <?=$rowd1['count']?> total</span></p>
                 </div>
             </div>
 
@@ -181,7 +192,7 @@
                     <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
                         <i data-lucide="washing-machine" class="w-5 h-5 text-blue-600"></i>Machine Availability Overview
                     </h3>
-                    <a href="machines.php" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">View All <?php echo ($_SESSION['w_no']+$_SESSION['d_no']);?> Machines →</a>
+                    <a href="machines.php" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">View All <?php echo ($roww1['count']+$rowd1['count']);?> Machines →</a>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="dashboard-machines-grid">

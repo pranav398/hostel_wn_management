@@ -40,7 +40,7 @@
                         <span>What happens if I miss my reserved time slot?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
-                    <p class="text-slate-500 mt-2 leading-relaxed">If you cancel your booking at least 90 minutes before the scheduled start time, your credits will be refunded and the slot will become available for others to book. However, if you cancel within 90 minutes of the scheduled start time, your credits will not be refunded. Even if you are unable to use your booking, you are encouraged to cancel it through the portal so that the slot can be utilized by another resident.</p>
+                    <p class="text-slate-500 mt-2 leading-relaxed">If you cancel your booking at least 90 minutes before the scheduled start time, your credits will be refunded and the slot will become available for others to book. However, if you cancel within 90 minutes of the scheduled start time, your credits will not be refunded. You can cancel at almost 30 minitues after the cycle begins. Even if you are unable to use your booking, you are encouraged to cancel it through the portal so that the slot can be utilized by another resident.</p>
                 </details>
 
                 <details class="group p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 cursor-pointer">

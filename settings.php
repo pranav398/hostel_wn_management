@@ -114,14 +114,6 @@
                             <label for="hostel-number" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Hostel</label>
                             <select id="hostel-number" name="hn" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                                 <?php
-                                    $hostelMap = [
-                                        '151' => 'Trident - Hostel 15 - Wing A',
-                                        '152' => 'Trident - Hostel 15 - Wing B',
-                                        '153' => 'Trident - Hostel 15 - Wing C',
-                                        '161' => 'Olympus - Hostel 16 - Wing A',
-                                        '162' => 'Olympus - Hostel 16 - Wing B',
-                                        '163' => 'Olympus - Hostel 16 - Wing C'
-                                    ];
                                     $currentHostel = isset($_SESSION['hn']) ? $_SESSION['hn'] : '';
                                     foreach ($hostelMap as $id => $label) {
                                         $selected = $id == $currentHostel ? 'selected' : '';
