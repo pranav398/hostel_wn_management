@@ -1,6 +1,0 @@
-{
-  "name": "Hostel Washing Machine Management System",
-  "description": "A premium modern web application for managing hostel washing machine schedules, bookings, status, and analytics.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
